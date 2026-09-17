@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Descoberta somente-leitura: resolve o project_id e lista issue-types,
-severities e issue-statuses configurados no projeto Taiga (via .env nesta pasta).
+"""Read-only discovery: resolves the project_id and lists the issue-types,
+severities and issue-statuses configured on the Taiga project (via .env in this folder).
 
-Uso:
+Usage:
     python taiga_discover.py
 """
 import sys
@@ -29,7 +29,7 @@ def main():
 
     project = client.project_by_slug(slug)
     project_id = project["id"]
-    print(f"Projeto: {project['name']} (id={project_id}, slug={slug})\n")
+    print(f"Project: {project['name']} (id={project_id}, slug={slug})\n")
 
     def show(title: str, path: str):
         print(f"== {title} ==")

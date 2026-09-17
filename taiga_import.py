@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
-"""Extrai issues de um relatório .md e os cria/atualiza no Taiga via API.
+"""Extracts issues from a .md report and creates/updates them in Taiga via the API.
 
-A extração é guiada por um arquivo de configuração (ver config.example.json)
-que descreve: como reconhecer o cabeçalho de cada item, como extrair a
-severidade, e como mapear seções do relatório para tags do Taiga. Nada disso
-fica fixo no código — cada relatório/projeto usa o seu próprio config.
+Extraction is driven by a configuration file (see config.example.json) that
+describes: how to recognize each item's heading, how to extract severity, and
+how to map report sections to Taiga tags. None of this is hardcoded — each
+report/project uses its own config.
 
-Uso:
-    python taiga_import.py extract --report relatorio.md --config config.json
+Usage:
+    python taiga_import.py extract --report report.md --config config.json
     python taiga_import.py apply --input taiga-import.json                 # dry-run
-    python taiga_import.py apply --input taiga-import.json --only BUG-01   # dry-run de 1 item
+    python taiga_import.py apply --input taiga-import.json --only BUG-01   # dry-run for 1 item
     python taiga_import.py apply --input taiga-import.json --apply --only BUG-01
-    python taiga_import.py apply --input taiga-import.json --apply         # cria todos os pendentes
-    python taiga_import.py retag --input taiga-import.json --apply         # corrige tags de issues já criados
+    python taiga_import.py apply --input taiga-import.json --apply         # creates all pending items
+    python taiga_import.py retag --input taiga-import.json --apply         # fixes tags on issues already created
 """
 import argparse
 import csv
@@ -33,8 +33,8 @@ HERE = Path(__file__).parent
 DEFAULT_JSON = HERE / "taiga-import.json"
 DEFAULT_LOG = HERE / "import-log.csv"
 
-# Links relativos para arquivos locais (ex.: [Anotações.md](Anotações.md)) não
-# resolvem dentro do Taiga — viram texto simples, mantendo a referência legível.
+# Relative links to local files (e.g. [Notes.md](Notes.md)) don't resolve
+# inside Taiga — they're flattened to plain text, keeping the reference readable.
 MD_LOCAL_LINK_RE = re.compile(r"\[([^\]]+)\]\((?!https?://)[^)]+\)")
 
 
@@ -92,7 +92,7 @@ def extract_bugs(markdown_text: str, config: dict) -> list:
         if transversal and config["transversal_tag"] not in tags:
             tags.append(config["transversal_tag"])
 
-        description = f"_Fonte: {config['source_label']}, {entry['id']}_\n\n{body}"
+        description = f"_Source: {config['source_label']}, {entry['id']}_\n\n{body}"
 
         return {
             "id": entry["id"],
@@ -141,10 +141,10 @@ def cmd_extract(args):
     bugs = extract_bugs(text, config)
     out_path = Path(args.out)
     out_path.write_text(json.dumps(bugs, ensure_ascii=False, indent=2), encoding="utf-8")
-    print(f"{len(bugs)} itens extraídos -> {out_path}")
-    sem_severidade = [b["id"] for b in bugs if b["severity_scale"] is None]
-    if sem_severidade:
-        print(f"AVISO: sem severidade detectada em: {', '.join(sem_severidade)}")
+    print(f"{len(bugs)} items extracted -> {out_path}")
+    no_severity = [b["id"] for b in bugs if b["severity_scale"] is None]
+    if no_severity:
+        print(f"WARNING: no severity detected in: {', '.join(no_severity)}")
 
 
 def load_already_imported(log_path: Path) -> set:
@@ -194,7 +194,7 @@ def cmd_apply(args):
         if only and bug["id"] not in only:
             continue
         if bug["id"] in already:
-            print(f"[skip] {bug['id']} já consta em {args.log}")
+            print(f"[skip] {bug['id']} already in {args.log}")
             skipped += 1
             continue
 
@@ -222,11 +222,11 @@ def cmd_apply(args):
             "url": url,
             "timestamp": datetime.now(timezone.utc).isoformat(),
         })
-        print(f"[criado] {bug['id']} -> #{result['ref']} ({url})")
+        print(f"[created] {bug['id']} -> #{result['ref']} ({url})")
         created += 1
 
-    mode = "aplicado" if args.apply else "dry-run"
-    print(f"\n{mode}: {created} criados, {skipped} já existentes.")
+    mode = "applied" if args.apply else "dry-run"
+    print(f"\n{mode}: {created} created, {skipped} already existing.")
 
 
 def load_log_rows(log_path: Path) -> dict:
@@ -255,7 +255,7 @@ def cmd_retag(args):
             continue
         bug = bugs.get(bug_id)
         if bug is None:
-            print(f"[skip] {bug_id} não está no JSON de entrada ({args.input})")
+            print(f"[skip] {bug_id} not found in input JSON ({args.input})")
             skipped += 1
             continue
 
@@ -263,7 +263,7 @@ def cmd_retag(args):
         current = client.get(f"/api/v1/issues/{issue_id}")
         current_tag_names = sorted(t if isinstance(t, str) else t[0] for t in current["tags"])
         if current_tag_names == sorted(bug["tags"]):
-            print(f"[skip] {bug_id} já está com as tags corretas")
+            print(f"[skip] {bug_id} already has the correct tags")
             skipped += 1
             continue
 
@@ -272,39 +272,39 @@ def cmd_retag(args):
             continue
 
         client.patch(f"/api/v1/issues/{issue_id}", {"tags": bug["tags"], "version": current["version"]})
-        print(f"[atualizado] {bug_id} (#{row['taiga_ref']}): {current['tags']} -> {bug['tags']}")
+        print(f"[updated] {bug_id} (#{row['taiga_ref']}): {current['tags']} -> {bug['tags']}")
         updated += 1
 
-    mode = "aplicado" if args.apply else "dry-run"
-    print(f"\n{mode}: {updated} atualizados, {skipped} pulados.")
+    mode = "applied" if args.apply else "dry-run"
+    print(f"\n{mode}: {updated} updated, {skipped} skipped.")
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = parser.add_subparsers(dest="command", required=True)
 
-    p_extract = sub.add_parser("extract", help="Lê o relatório .md e gera o JSON intermediário")
-    p_extract.add_argument("--report", required=True, help="Caminho do relatório .md de origem")
-    p_extract.add_argument("--config", required=True, help="Caminho do arquivo de configuração (ver config.example.json)")
+    p_extract = sub.add_parser("extract", help="Reads the .md report and generates the intermediate JSON")
+    p_extract.add_argument("--report", required=True, help="Path to the source .md report")
+    p_extract.add_argument("--config", required=True, help="Path to the configuration file (see config.example.json)")
     p_extract.add_argument("--out", default=str(DEFAULT_JSON))
     p_extract.set_defaults(func=cmd_extract)
 
-    p_apply = sub.add_parser("apply", help="Cria os issues no Taiga a partir do JSON")
+    p_apply = sub.add_parser("apply", help="Creates the issues in Taiga from the JSON")
     p_apply.add_argument("--input", default=str(DEFAULT_JSON))
     p_apply.add_argument("--log", default=str(DEFAULT_LOG))
-    p_apply.add_argument("--only", action="append", help="Restringe a um BUG-ID específico (repetível)")
-    p_apply.add_argument("--apply", action="store_true", help="Sem esta flag, roda em dry-run")
+    p_apply.add_argument("--only", action="append", help="Restrict to a specific BUG-ID (repeatable)")
+    p_apply.add_argument("--apply", action="store_true", help="Without this flag, runs in dry-run mode")
     p_apply.add_argument("--issue-type", default="Bug")
-    p_apply.add_argument("--sev1", default="Minor", help="Nome da severidade Taiga para escala 1 (cosmético)")
-    p_apply.add_argument("--sev2", default="Normal", help="Nome da severidade Taiga para escala 2 (funcional/layout)")
-    p_apply.add_argument("--sev3", default="Critical", help="Nome da severidade Taiga para escala 3 (severo)")
+    p_apply.add_argument("--sev1", default="Minor", help="Taiga severity name for scale 1 (cosmetic)")
+    p_apply.add_argument("--sev2", default="Normal", help="Taiga severity name for scale 2 (functional/layout)")
+    p_apply.add_argument("--sev3", default="Critical", help="Taiga severity name for scale 3 (severe)")
     p_apply.set_defaults(func=cmd_apply)
 
-    p_retag = sub.add_parser("retag", help="Corrige as tags de issues já criados, usando o log de import")
+    p_retag = sub.add_parser("retag", help="Fixes tags on issues already created, using the import log")
     p_retag.add_argument("--input", default=str(DEFAULT_JSON))
     p_retag.add_argument("--log", default=str(DEFAULT_LOG))
-    p_retag.add_argument("--only", action="append", help="Restringe a um BUG-ID específico (repetível)")
-    p_retag.add_argument("--apply", action="store_true", help="Sem esta flag, roda em dry-run")
+    p_retag.add_argument("--only", action="append", help="Restrict to a specific BUG-ID (repeatable)")
+    p_retag.add_argument("--apply", action="store_true", help="Without this flag, runs in dry-run mode")
     p_retag.set_defaults(func=cmd_retag)
 
     args = parser.parse_args()

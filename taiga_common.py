@@ -1,4 +1,4 @@
-"""Utilidades compartilhadas pelos scripts de import do Taiga."""
+"""Shared utilities for the Taiga import scripts."""
 import os
 from pathlib import Path
 
@@ -6,8 +6,8 @@ import requests
 
 
 def load_env(path: Path) -> dict:
-    """Lê um arquivo .env aceitando tanto `CHAVE=valor` quanto `CHAVE: valor`.
-    Variáveis já definidas no ambiente do processo têm prioridade sobre o arquivo.
+    """Reads a .env file, accepting both `KEY=value` and `KEY: value`.
+    Variables already set in the process environment take priority over the file.
     """
     values = {}
     if path.exists():
@@ -32,8 +32,8 @@ def require(env: dict, *keys: str) -> list:
     missing = [k for k in keys if not env.get(k)]
     if missing:
         raise SystemExit(
-            f"Faltam variáveis no .env: {', '.join(missing)} "
-            f"(ver .env.example nesta pasta)"
+            f"Missing variables in .env: {', '.join(missing)} "
+            f"(see .env.example in this folder)"
         )
     return [env[k] for k in keys]
 
@@ -76,7 +76,7 @@ def find_id_by_name(items: list, name: str, kind: str) -> int:
         if item["name"].strip().lower() == name.strip().lower():
             return item["id"]
     available = ", ".join(item["name"] for item in items)
-    raise SystemExit(f'{kind} "{name}" não encontrado no projeto. Disponíveis: {available}')
+    raise SystemExit(f'{kind} "{name}" not found in project. Available: {available}')
 
 
 def issue_url(base_url: str, project_slug: str, ref) -> str:

@@ -1,18 +1,18 @@
 {
-  "source_label": "meu-relatorio.md",
+  "source_label": "my-report.md",
   "bug_heading_pattern": "^####\\s+(BUG-\\d{8}-\\d{2})\\s+—\\s+(.*)$",
-  "severity_pattern": "\\*\\*Severidade:\\*\\*\\s*(\\d)",
-  "base_tags": ["meu-produto"],
-  "default_tag": "meu-produto",
+  "severity_pattern": "\\*\\*Severity:\\*\\*\\s*(\\d)",
+  "base_tags": ["my-product"],
+  "default_tag": "my-product",
   "transversal_tag": "transversal",
   "heading_tag_rules": [
-    { "pattern": "^##\\s+2\\.", "tag": "padrao-geral", "transversal": true },
-    { "pattern": "^###\\s+3\\.1\\b", "tag": "modulo-a" },
-    { "pattern": "^###\\s+3\\.2\\b", "tag": "modulo-b" },
+    { "pattern": "^##\\s+2\\.", "tag": "general-standard", "transversal": true },
+    { "pattern": "^###\\s+3\\.1\\b", "tag": "module-a" },
+    { "pattern": "^###\\s+3\\.2\\b", "tag": "module-b" },
     { "pattern": "^##\\s+" }
   ],
   "fallback_tag_by_keyword": [
-    { "keyword": "Módulo A", "tag": "modulo-a" },
-    { "keyword": "Módulo B", "tag": "modulo-b" }
+    { "keyword": "Module A", "tag": "module-a" },
+    { "keyword": "Module B", "tag": "module-b" }
   ]
 }

@@ -1,153 +1,179 @@
 # Import Taiga API
 
-Ferramenta em Python para extrair itens (bugs/defeitos) de um relatório `.md`
-de QA e criá-los — ou corrigir suas tags depois de criados — como **Issues**
-no [Taiga](https://www.taiga.io/) via API REST, sem passar pela criação
-manual na interface.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/)
 
-Não é específica de nenhum projeto: a forma como o relatório é interpretado
-(como reconhecer cada item, como extrair a severidade, como mapear seções do
-relatório para tags do Taiga) fica num arquivo de configuração à parte — ver
+🇬🇧 English | 🇧🇷 [Português](README.pt-BR.md)
+
+A Python tool that extracts items (bugs/defects) from a QA report written in
+`.md` and creates them — or fixes their tags after they've been created — as
+**Issues** in [Taiga](https://www.taiga.io/) via its REST API, without going
+through manual creation in the UI.
+
+It isn't tied to any specific project: how the report is parsed (how to
+recognize each item, how to extract severity, how to map report sections to
+Taiga tags) lives in a separate configuration file — see
 [`config.example.json`](config.example.json).
 
-## Por que
+## Why
 
-Criar dezenas de issues manualmente, um a um, colando campos na UI do Taiga,
-é lento e sujeito a erro (severidade errada, tag esquecida, campo em branco).
-Este projeto automatiza isso a partir de um relatório de QA já escrito em
-Markdown, mantendo um **dry-run por padrão** (nada é criado sem `--apply`
-explícito) e um **log local** que evita duplicar issues em reexecuções.
+Creating dozens of issues by hand, one at a time, pasting fields into the
+Taiga UI, is slow and error-prone (wrong severity, forgotten tag, blank
+field). This project automates that from a QA report already written in
+Markdown, keeping a **dry-run by default** (nothing is created without an
+explicit `--apply`) and a **local log** that prevents duplicate issues on
+re-runs.
 
-## Requisitos
+## Requirements
 
 - Python 3.9+
-- Uma conta Taiga com usuário/senha (login "normal"; login via SSO/GitHub/
-  GitLab não tem senha e não funciona com este fluxo de autenticação)
+- A Taiga account with a username/password (a "normal" login; SSO/GitHub/
+  GitLab logins have no password and don't work with this authentication flow)
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## Configuração
+## Setup
 
-### 1. Credenciais (`.env`)
+### 1. Credentials (`.env`)
 
-Copie `.env.example` para `.env` e preencha:
+Copy `.env.example` to `.env` and fill it in:
 
 ```
 TAIGA_URL=https://api.taiga.io
 TAIGA_WEB_URL=https://tree.taiga.io
-TAIGA_PROJECT_SLUG=meu-slug-de-projeto
+TAIGA_PROJECT_SLUG=my-project-slug
 TAIGA_USER=
 TAIGA_PASSWORD=
 ```
 
-- `TAIGA_URL` — host da **API**. No Taiga Cloud é `https://api.taiga.io`
-  (não confundir com o domínio da interface web). Numa instância self-hosted
-  costuma ser o mesmo host da interface, ex.: `https://taiga.minhaempresa.com`.
-- `TAIGA_WEB_URL` — host da **interface web**, usado só para montar links
-  clicáveis no log de import. Se omitido, usa o mesmo valor de `TAIGA_URL`
-  (correto para a maioria das instâncias self-hosted). No Taiga Cloud é
-  `https://tree.taiga.io` (diferente do host da API).
-- `TAIGA_PROJECT_SLUG` — slug do projeto, visível na URL do projeto no Taiga
-  (`.../project/<slug>`).
-- `.env` nunca é commitado (está no `.gitignore`); a senha é usada só em
-  tempo de execução para obter um token via `POST /api/v1/auth` — não fica
-  persistida em disco.
+- `TAIGA_URL` — the **API** host. On Taiga Cloud this is `https://api.taiga.io`
+  (don't confuse it with the web UI domain). On a self-hosted instance it's
+  usually the same host as the UI, e.g. `https://taiga.mycompany.com`.
+- `TAIGA_WEB_URL` — the **web UI** host, used only to build clickable links in
+  the import log. If omitted, it falls back to `TAIGA_URL` (correct for most
+  self-hosted instances). On Taiga Cloud it's `https://tree.taiga.io`
+  (different from the API host).
+- `TAIGA_PROJECT_SLUG` — the project slug, visible in the project's URL on
+  Taiga (`.../project/<slug>`).
+- `.env` is never committed (it's in `.gitignore`); the password is only used
+  at runtime to obtain a token via `POST /api/v1/auth` — it isn't persisted to
+  disk.
 
-### 2. Config de extração (`config.json`)
+### 2. Extraction config (`config.json`)
 
-Copie `config.example.json` para `config.json` e adapte ao seu relatório.
-Campos:
+Copy `config.example.json` to `config.json` and adapt it to your report.
+Fields:
 
-| Campo | Descrição |
+| Field | Description |
 |---|---|
-| `source_label` | Nome do relatório de origem, só para referência na descrição de cada issue criado. |
-| `bug_heading_pattern` | Regex com 2 grupos de captura: `(id)` e `(título)` do cabeçalho de cada item no `.md`. Ex.: `^####\s+(BUG-\d{8}-\d{2})\s+—\s+(.*)$`. |
-| `severity_pattern` | Regex com 1 grupo de captura: o dígito de severidade dentro do texto do item (essa linha é removida da descrição final). |
-| `base_tags` | Lista de tags aplicadas a **todo** item (ex.: o nome do módulo/produto testado). |
-| `default_tag` | Tag usada quando nenhuma regra de `heading_tag_rules` bate. |
-| `transversal_tag` | Tag adicional aplicada a itens marcados `"transversal": true` (ex.: bugs que afetam o sistema todo, não uma tela específica). |
-| `heading_tag_rules` | Lista ordenada de `{pattern, tag, transversal}`. Ao percorrer o `.md` linha a linha, a primeira regra cujo `pattern` bate com uma linha de cabeçalho (`##`, `###`, ...) passa a valer para todo item encontrado depois, até a próxima regra bater. Uma regra sem `tag` **reseta** o mapeamento (útil para seções que não têm tag própria). Regras mais específicas devem vir antes de regras mais genéricas na lista. |
-| `fallback_tag_by_keyword` | Lista de `{keyword, tag}` usada só quando `heading_tag_rules` não define nenhuma tag para o item — procura a `keyword` no corpo do item e usa a `tag` correspondente. |
+| `source_label` | Name of the source report, used only for reference in each created issue's description. |
+| `bug_heading_pattern` | Regex with 2 capture groups: `(id)` and `(title)` of each item's heading in the `.md`. E.g.: `^####\s+(BUG-\d{8}-\d{2})\s+—\s+(.*)$`. |
+| `severity_pattern` | Regex with 1 capture group: the severity digit inside the item's text (this line is removed from the final description). |
+| `base_tags` | List of tags applied to **every** item (e.g. the name of the module/product being tested). |
+| `default_tag` | Tag used when no `heading_tag_rules` rule matches. |
+| `transversal_tag` | Extra tag applied to items marked `"transversal": true` (e.g. bugs that affect the whole system rather than a specific screen). |
+| `heading_tag_rules` | Ordered list of `{pattern, tag, transversal}`. While walking the `.md` line by line, the first rule whose `pattern` matches a heading line (`##`, `###`, ...) becomes the active mapping for every item found afterwards, until the next rule matches. A rule with no `tag` **resets** the mapping (useful for sections that have no tag of their own). More specific rules should come before more generic ones in the list. |
+| `fallback_tag_by_keyword` | List of `{keyword, tag}`, used only when `heading_tag_rules` didn't assign a tag to the item — it looks for `keyword` in the item's body and uses the matching `tag`. |
 
-`config.json` também não é commitado — o mapeamento de seções costuma
-refletir a estrutura/nomenclatura interna de um projeto específico.
+`config.json` is also not committed — the section mapping usually reflects the
+internal structure/naming of one specific project.
 
-## Uso
+## Usage
 
-### 1. Descoberta (só leitura)
+### 1. Discovery (read-only)
 
-Confirma que as credenciais funcionam e lista os IDs de tipo de issue,
-severidade e status configurados no seu projeto Taiga:
+Confirms the credentials work and lists the issue type, severity and status
+IDs configured in your Taiga project:
 
 ```bash
 python taiga_discover.py
 ```
 
-### 2. Extrair o relatório para JSON
+### 2. Extract the report to JSON
 
 ```bash
-python taiga_import.py extract --report caminho/para/relatorio.md --config config.json --out taiga-import.json
+python taiga_import.py extract --report path/to/report.md --config config.json --out taiga-import.json
 ```
 
-Revise o `taiga-import.json` gerado antes do próximo passo — é a chance de
-conferir subject/descrição/severidade/tags de cada item antes de qualquer
-chamada de escrita à API.
+Review the generated `taiga-import.json` before the next step — it's your
+chance to check each item's subject/description/severity/tags before any
+write call to the API.
 
-### 3. Criar os issues no Taiga
+### 3. Create the issues in Taiga
 
-Por padrão roda em **dry-run** (mostra os payloads, não cria nada):
+Runs in **dry-run** by default (prints the payloads, creates nothing):
 
 ```bash
 python taiga_import.py apply --input taiga-import.json
 ```
 
-Teste com um item antes de criar todos:
+Test with a single item before creating them all:
 
 ```bash
 python taiga_import.py apply --input taiga-import.json --apply --only BUG-20260915-01
 ```
 
-Criar o restante (reexecuções pulam automaticamente o que já está no log):
+Create the rest (re-runs automatically skip anything already in the log):
 
 ```bash
 python taiga_import.py apply --input taiga-import.json --apply
 ```
 
-Flags úteis: `--issue-type` (padrão `Bug`), `--sev1`/`--sev2`/`--sev3` (nomes
-de severidade do Taiga para as escalas 1/2/3 do seu relatório — padrão
-`Minor`/`Normal`/`Critical`, os nomes default do Taiga), `--log` (arquivo de
-rastreio, padrão `import-log.csv`).
+Useful flags: `--issue-type` (default `Bug`), `--sev1`/`--sev2`/`--sev3` (Taiga
+severity names for your report's 1/2/3 scale — default `Minor`/`Normal`/
+`Critical`, Taiga's own defaults), `--log` (tracking file, default
+`import-log.csv`).
 
-### 4. Corrigir tags de issues já criados
+### 4. Fix tags on issues already created
 
-Se você mudar as regras do `config.json` depois de já ter criado issues,
-`retag` reaplica as tags do JSON extraído em cada issue já registrado no log
-(usa optimistic concurrency — busca a `version` atual do issue antes de
-gravar):
+If you change the rules in `config.json` after issues have already been
+created, `retag` reapplies the tags from the extracted JSON to each issue
+already recorded in the log (uses optimistic concurrency — fetches the
+issue's current `version` before writing):
 
 ```bash
 python taiga_import.py retag --input taiga-import.json          # dry-run
-python taiga_import.py retag --input taiga-import.json --apply  # aplica
+python taiga_import.py retag --input taiga-import.json --apply  # applies it
 ```
 
-## Arquivos
+## Files
 
-| Arquivo | Versionado? | Descrição |
+| File | Tracked? | Description |
 |---|---|---|
-| `taiga_common.py` | sim | Cliente HTTP (auth, GET/POST/PATCH) e loader de `.env`. |
-| `taiga_discover.py` | sim | Lista tipos/severidades/status do projeto configurado. |
-| `taiga_import.py` | sim | `extract` / `apply` / `retag`. |
-| `config.example.json` | sim | Modelo de config de extração (genérico). |
-| `.env.example` | sim | Modelo de credenciais. |
-| `config.json` | não | Sua config real, específica do relatório/projeto. |
-| `.env` | não | Suas credenciais reais. |
-| `taiga-import*.json`, `import-log*.csv` | não | Saída gerada a cada execução — dados do seu relatório, não do repositório. |
+| `taiga_common.py` | yes | HTTP client (auth, GET/POST/PATCH) and `.env` loader. |
+| `taiga_discover.py` | yes | Lists issue types/severities/statuses for the configured project. |
+| `taiga_import.py` | yes | `extract` / `apply` / `retag`. |
+| `config.example.json` | yes | Generic extraction config template. |
+| `.env.example` | yes | Credentials template. |
+| `config.json` | no | Your real config, specific to your report/project. |
+| `.env` | no | Your real credentials. |
+| `taiga-import*.json`, `import-log*.csv` | no | Output generated on each run — data from your report, not from the repository. |
 
-## Segurança
+## Security
 
-- Sem `--apply`, nenhum comando grava nada no Taiga.
-- `.env` e `config.json` nunca são commitados.
-- A senha nunca é salva em disco pelo script — só o token de sessão (em
-  memória, durante a execução).
+- Without `--apply`, no command writes anything to Taiga.
+- `.env` and `config.json` are never committed.
+- The password is never saved to disk by the script — only the session token
+  (in memory, for the duration of the run).
+
+See [SECURITY.md](.github/SECURITY.md) for how to report a vulnerability.
+
+## Contributing
+
+Contributions, bug reports and feature requests are welcome — see
+[CONTRIBUTING.md](CONTRIBUTING.md) for how to get started, and please follow
+the [Code of Conduct](CODE_OF_CONDUCT.md).
+
+## Contact
+
+Maintained by **Gabriel Vidal**.
+
+- Email: [gabrielvidalsoda@gmail.com](mailto:gabrielvidalsoda@gmail.com)
+- WhatsApp: [+55 (85) 99406-4049](https://bit.ly/4reII3v)
+- LinkedIn: [linkedin.com/in/gabrielvidalsoda](https://www.linkedin.com/in/gabrielvidalsoda)
+
+## License
+
+[MIT](LICENSE) © 2026 Gabriel Vidal
