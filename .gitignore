@@ -1,0 +1,8 @@
+.env
+config.json
+taiga-import*.json
+import-log*.csv
+__pycache__/
+*.pyc
+.venv/
+venv/
