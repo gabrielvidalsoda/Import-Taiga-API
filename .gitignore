@@ -2,6 +2,8 @@
 config.json
 taiga-import*.json
 import-log*.csv
+!reports/*.json
+!reports/*.csv
 __pycache__/
 *.pyc
 .venv/

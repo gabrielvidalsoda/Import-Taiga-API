@@ -121,6 +121,12 @@ Create the rest (re-runs automatically skip anything already in the log):
 python taiga_import.py apply --input taiga-import.json --apply
 ```
 
+To keep a permanent record of a real run (not just the scratch working
+files), pass `--out`/`--log` paths under `reports/` — see
+[`reports/README.md`](reports/README.md) for the naming convention. Unlike
+the default `taiga-import.json`/`import-log.csv`, files under `reports/` are
+committed to the repository as import history.
+
 Useful flags: `--issue-type` (default `Bug`), `--sev1`/`--sev2`/`--sev3` (Taiga
 severity names for your report's 1/2/3 scale — default `Minor`/`Normal`/
 `Critical`, Taiga's own defaults), `--log` (tracking file, default
@@ -138,6 +144,18 @@ python taiga_import.py retag --input taiga-import.json          # dry-run
 python taiga_import.py retag --input taiga-import.json --apply  # applies it
 ```
 
+### 5. Assign issues to a project member
+
+Given an import-log CSV (from a past `apply --apply` run), assigns each
+issue in it to a project member. Members are matched by full name, since
+the Taiga API does not expose other members' emails:
+
+```bash
+python taiga_assign.py --log reports/import-log-2026-09-15.csv --name "Jane Doe"            # dry-run
+python taiga_assign.py --log reports/import-log-2026-09-15.csv --name "Jane Doe" --apply     # applies it
+python taiga_assign.py --log reports/import-log-2026-09-15.csv --name "Jane Doe" --apply --only BUG-20260915-01
+```
+
 ## Files
 
 | File | Tracked? | Description |
@@ -145,11 +163,13 @@ python taiga_import.py retag --input taiga-import.json --apply  # applies it
 | `taiga_common.py` | yes | HTTP client (auth, GET/POST/PATCH) and `.env` loader. |
 | `taiga_discover.py` | yes | Lists issue types/severities/statuses for the configured project. |
 | `taiga_import.py` | yes | `extract` / `apply` / `retag`. |
+| `taiga_assign.py` | yes | Assigns issues from an import-log CSV to a project member, by name. |
 | `config.example.json` | yes | Generic extraction config template. |
 | `.env.example` | yes | Credentials template. |
 | `config.json` | no | Your real config, specific to your report/project. |
 | `.env` | no | Your real credentials. |
-| `taiga-import*.json`, `import-log*.csv` | no | Output generated on each run — data from your report, not from the repository. |
+| `taiga-import.json`, `import-log.csv` (repo root) | no | Scratch output of the run in progress — data from your report, not from the repository. |
+| `reports/*.json`, `reports/*.csv` | yes | Permanent history of past `--apply` runs, kept on purpose — see [`reports/README.md`](reports/README.md). |
 
 ## Security
 

@@ -9,6 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `taiga_assign.py`: assigns already-created Taiga issues to a project
+  member, given an import-log CSV. Resolves the member by full name (the
+  Taiga API does not expose member emails), and follows the same
+  dry-run-by-default / `--apply` / `--only` conventions as `taiga_import.py`.
+- `reports/` folder to keep a permanent, committed history of past
+  `--apply` runs (extracted JSON + import log CSV per run), documented in
+  `reports/README.md`. Unlike the default `taiga-import.json`/
+  `import-log.csv`, files placed under `reports/` are no longer
+  git-ignored.
 - `LICENSE` (MIT), `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `.github/SECURITY.md`.
 - Issue templates (bug report, feature request) and a pull request template.
 - `README.pt-BR.md` as a Portuguese counterpart to `README.md`.

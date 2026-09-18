@@ -1,0 +1,338 @@
+[
+  {
+    "id": "BUG-20260915-01",
+    "subject": "BUG-20260915-01 — Breadcrumb aparece em páginas acessíveis diretamente pelo menu",
+    "description": "_Fonte: Relatorio-Testes-Manuais-2026-09-15.md, BUG-20260915-01_\n\n- **Tela / rota:** Geral — área Dados de Referência\n- **Padrão de referência:** Manual A.1 (breadcrumb deve refletir a hierarquia de navegação de forma consistente)\n- **Observado:** o breadcrumb aparece também em páginas de topo, acessíveis diretamente pelo menu principal, de forma inconsistente com o restante do sistema.\n- **Evidência:** Anotações.md (linha 11).",
+    "severity_scale": 1,
+    "tags": [
+      "dados-referencia",
+      "padrao-manual",
+      "sistema-geral"
+    ]
+  },
+  {
+    "id": "BUG-20260915-02",
+    "subject": "BUG-20260915-02 — Botão \"Voltar\" fora do padrão ou ausente",
+    "description": "_Fonte: Relatorio-Testes-Manuais-2026-09-15.md, BUG-20260915-02_\n\n- **Telas / rotas:** Embalagens e Medicamentos (detalhe — ausente); CNPEM (detalhe — fora do padrão); Médicos/Prescritores (detalhe — fora do padrão); Exames MCDT (detalhe — fora do padrão); Sistemas CRD (detalhe — fora do padrão, anotado como \"Detalhe exame MCDT\", provável erro de digitação na origem); Vacinas (detalhe — fora do padrão); Serviços Dispensa em Proximidade (fora do padrão).\n- **Padrão de referência:** Manual A.3 (botão \"Voltar\" sempre embaixo à esquerda, com borda).\n- **Esperado:** botão \"Voltar\" presente, embaixo à esquerda, com borda, em todas as telas de detalhe.\n- **Observado:** em Embalagens e Medicamentos o botão não existe; nas demais áreas listadas, existe mas em posição/estilo fora do padrão.\n- **Evidência:** Anotações.md (linhas 27, 53, 95, 118, 123, 157, 193).",
+    "severity_scale": 1,
+    "tags": [
+      "dados-referencia",
+      "padrao-manual",
+      "sistema-geral"
+    ]
+  },
+  {
+    "id": "BUG-20260915-03",
+    "subject": "BUG-20260915-03 — Ausência de opção \"Colapsar\" em seções de detalhe",
+    "description": "_Fonte: Relatorio-Testes-Manuais-2026-09-15.md, BUG-20260915-03_\n\n- **Telas / rotas:** Pesquisa Convenções (Dados do conveniado, `/dados-referencia/convencoes/1`); Embalagens e Medicamentos (`/dados-referencia/embalagens-medicamentos/46558` — nenhuma seção); CNPEM (Detalhe CNPEM); Vacinas (algumas seções do Detalhe).\n- **Observado:** as seções citadas não oferecem opção de colapsar, diferente de outras páginas de detalhe do sistema que já têm esse recurso.\n- **Nota:** o critério de **onde** o colapsar deve existir (só em detalhe, ou também em pesquisa) ainda não está decidido no Manual — ver item correspondente em Padroes-Que-Precisam-De-Definicao-2026-09-15.md. Este BUG cobre apenas a **inconsistência** (páginas de detalhe comparáveis com e sem o recurso), não a definição da regra.\n- **Evidência:** Anotações.md (linhas 22, 26, 52, 156).",
+    "severity_scale": 1,
+    "tags": [
+      "dados-referencia",
+      "padrao-manual",
+      "sistema-geral"
+    ]
+  },
+  {
+    "id": "BUG-20260915-04",
+    "subject": "BUG-20260915-04 — Filtro de \"Situação\" vem pré-selecionado",
+    "description": "_Fonte: Relatorio-Testes-Manuais-2026-09-15.md, BUG-20260915-04_\n\n- **Tela / rota:** Diplomas / Despachos\n- **Padrão de referência:** Manual B.1/B.2 (filtro de Estado/Situação nunca vem pré-selecionado, inicia em \"Selecione\").\n- **Observado:** o campo \"Situação\" pré-seleciona a opção \"Vigentes\" ao abrir a página.\n- **Nota:** a anotação original traz isso como dúvida (\"Devemos manter ou deixar 'Selecionar' como padrão?\") — já está respondida pelo Manual B.1, por isso entra como defeito confirmado, não como pauta em aberto.\n- **Evidência:** Anotações.md (linha 57).",
+    "severity_scale": 1,
+    "tags": [
+      "dados-referencia",
+      "padrao-manual",
+      "sistema-geral"
+    ]
+  },
+  {
+    "id": "BUG-20260915-05",
+    "subject": "BUG-20260915-05 — Botão \"Limpar\" fora do padrão",
+    "description": "_Fonte: Relatorio-Testes-Manuais-2026-09-15.md, BUG-20260915-05_\n\n- **Telas / rotas:** Médicos/Prescritores; Exames MCDT; Sistemas CRD; Tipos de Preço Hemodiálise; Serviços Dispensa em Proximidade.\n- **Padrão de referência:** Manual B.4 (botão \"Limpar\" — text button, sem borda).\n- **Evidência:** Anotações.md (linhas 92, 116, 121, 132, 193).",
+    "severity_scale": 1,
+    "tags": [
+      "dados-referencia",
+      "padrao-manual",
+      "sistema-geral"
+    ]
+  },
+  {
+    "id": "BUG-20260915-06",
+    "subject": "BUG-20260915-06 — Botão \"Limpar\" não remove o campo \"Data de Referência\"",
+    "description": "_Fonte: Relatorio-Testes-Manuais-2026-09-15.md, BUG-20260915-06_\n\n- **Telas / rotas:** CNPEM; Médicos/Prescritores.\n- **Esperado:** \"Limpar\" reseta todos os campos do formulário de pesquisa, incluindo \"Data de Referência\".\n- **Observado:** o campo \"Data de Referência\" permanece preenchido após clicar em \"Limpar\".\n- **Evidência:** Anotações.md (linhas 51, 93).",
+    "severity_scale": 2,
+    "tags": [
+      "dados-referencia",
+      "padrao-manual",
+      "sistema-geral"
+    ]
+  },
+  {
+    "id": "BUG-20260915-07",
+    "subject": "BUG-20260915-07 — Campo de data pré-seleciona a data de hoje e/ou usa o seletor nativo do navegador",
+    "description": "_Fonte: Relatorio-Testes-Manuais-2026-09-15.md, BUG-20260915-07_\n\n- **Telas / rotas:** CNPEM (Data de Referência preenche com a data de hoje ao clicar em \"Pesquisar\"); Diplomas (campo \"Vigente em\" pré-seleciona hoje); Médicos/Prescritores (seletor nativo do navegador em vez do componente do design system); Locais de Prescrição (Data de Referência preenchida automaticamente).\n- **Padrão de referência:** Manual B.8 (campo de data sempre via Datepicker do design system; nunca pré-seleciona hoje).\n- **Nota:** em Diplomas, a anotação original traz isso como dúvida (\"Devemos manter ou deixar em branco?\") — já respondida pelo Manual B.8.\n- **Evidência:** Anotações.md (linhas 50, 58, 91, 201).",
+    "severity_scale": 2,
+    "tags": [
+      "dados-referencia",
+      "padrao-manual",
+      "sistema-geral"
+    ]
+  },
+  {
+    "id": "BUG-20260915-08",
+    "subject": "BUG-20260915-08 — Placeholder mostra \"exemplo\" fixo em vez de instrução de preenchimento",
+    "description": "_Fonte: Relatorio-Testes-Manuais-2026-09-15.md, BUG-20260915-08_\n\n- **Telas / rotas:** Pesquisa Convenções; CNPEM; Diplomas / Despachos.\n- **Padrão de referência:** Manual B.7 (campo vazio deve mostrar instrução de preenchimento com opacidade reduzida, não um valor de exemplo \"pesado\").\n- **Evidência:** Anotações.md (linhas 17, 48, 56).",
+    "severity_scale": 1,
+    "tags": [
+      "dados-referencia",
+      "padrao-manual",
+      "sistema-geral"
+    ]
+  },
+  {
+    "id": "BUG-20260915-09",
+    "subject": "BUG-20260915-09 — Filtros aplicados não condizem com o resultado exibido na tabela",
+    "description": "_Fonte: Relatorio-Testes-Manuais-2026-09-15.md, BUG-20260915-09_\n\n- **Tela / rota:** Locais de Prescrição\n- **Padrão de referência:** Manual B.11 (campo de filtro usado na pesquisa deve refletir como coluna consistente no resultado).\n- **Observado:** os filtros aplicados na pesquisa não correspondem ao que é exibido na tabela de resultados.\n- **Evidência:** Anotações.md (linha 245).",
+    "severity_scale": 2,
+    "tags": [
+      "dados-referencia",
+      "padrao-manual",
+      "sistema-geral"
+    ]
+  },
+  {
+    "id": "BUG-20260915-10",
+    "subject": "BUG-20260915-10 — Estado/Situação/Vigência exibidos como chip em vez de texto simples",
+    "description": "_Fonte: Relatorio-Testes-Manuais-2026-09-15.md, BUG-20260915-10_\n\n- **Telas / rotas:** CNPEM (resultado da pesquisa); Diplomas (coluna \"Situação\"); Médicos/Prescritores (coluna \"Estado\" e \"Estado à data de referência\"); Locais de Prescrição (coluna \"Vigência\").\n- **Padrão de referência:** Manual C.3 (estado em tabela é sempre texto simples, sem borda/cor de fundo/badge).\n- **Evidência:** Anotações.md (linhas 49, 84, 90, 94, 244).",
+    "severity_scale": 1,
+    "tags": [
+      "dados-referencia",
+      "padrao-manual",
+      "sistema-geral"
+    ]
+  },
+  {
+    "id": "BUG-20260915-11",
+    "subject": "BUG-20260915-11 — Coluna de ação não fica à esquerda e/ou sem cabeçalho",
+    "description": "_Fonte: Relatorio-Testes-Manuais-2026-09-15.md, BUG-20260915-11_\n\n- **Telas / rotas:** Sistemas CRD; Tipos de Preço Hemodiálise (resultado da pesquisa e detalhe); Diplomas (coluna \"Ações\" à direita, e rótulo \"Acções\" com erro de grafia — correto é \"Ações\"); Vacinas (falta o título do cabeçalho); Serviços Dispensa em Proximidade (falta título, posição à direita e à esquerda misturada); Programa Troca de Seringas (coluna sem cabeçalho).\n- **Padrão de referência:** Manual C.5 (coluna de ação à esquerda, ícone sem rótulo nas células, cabeçalho sempre com o texto \"Ação\"/\"Ações\").\n- **Evidência:** Anotações.md (linhas 85, 125, 128, 129, 131, 155, 160, 197).",
+    "severity_scale": 1,
+    "tags": [
+      "dados-referencia",
+      "padrao-manual",
+      "sistema-geral"
+    ]
+  },
+  {
+    "id": "BUG-20260915-12",
+    "subject": "BUG-20260915-12 — Ordenação por clique no cabeçalho não habilitada ou só parcial",
+    "description": "_Fonte: Relatorio-Testes-Manuais-2026-09-15.md, BUG-20260915-12_\n\n- **Telas / rotas:** Geral (nem todas as tabelas de Dados de Referência têm ordenação); Sistemas CRD (Detalhe — ordenação funciona só em algumas colunas).\n- **Padrão de referência:** Manual C.1 (mesmo defeito já rastreado em `TASK-20260914-03`, agora confirmado também nas telas de Dados de Referência).\n- **Evidência:** Anotações.md (linhas 12, 124).",
+    "severity_scale": 2,
+    "tags": [
+      "dados-referencia",
+      "padrao-manual",
+      "sistema-geral"
+    ]
+  },
+  {
+    "id": "BUG-20260915-13",
+    "subject": "BUG-20260915-13 — Seletor de \"Resultados por página\" não funciona",
+    "description": "_Fonte: Relatorio-Testes-Manuais-2026-09-15.md, BUG-20260915-13_\n\n- **Telas / rotas:** Exames MCDT; Sistemas CRD; Serviços Dispensa em Proximidade.\n- **Padrão de referência:** Manual C.4 (toda tabela paginada deve ter o seletor funcional).\n- **Esperado:** selecionar uma quantidade diferente recarrega a tabela com o novo número de linhas.\n- **Observado:** o seletor está presente mas não tem efeito (mesma família de defeito de `BUG-20260911-03`).\n- **Evidência:** Anotações.md (linhas 117, 122, 192).",
+    "severity_scale": 2,
+    "tags": [
+      "dados-referencia",
+      "padrao-manual",
+      "sistema-geral"
+    ]
+  },
+  {
+    "id": "BUG-20260915-14",
+    "subject": "BUG-20260915-14 — Pesquisar/filtrar sem preencher campos obrigatórios não mostra mensagem de erro",
+    "description": "_Fonte: Relatorio-Testes-Manuais-2026-09-15.md, BUG-20260915-14_\n\n- **Telas / rotas:** Diplomas (`/dados-referencia/diplomas/5117` — tentar filtrar sem preencher o campo); EFR (pesquisar sem nenhum campo preenchido).\n- **Padrão de referência:** Manual D.1/E.2 (botão sempre clicável; se faltar pré-requisito, deve exibir mensagem clara do que falta — nunca falhar silenciosamente).\n- **Observado:** a ação é executada sem preencher os campos e nenhum aviso é retornado ao usuário.\n- **Evidência:** Anotações.md (linhas 86, 250).",
+    "severity_scale": 2,
+    "tags": [
+      "dados-referencia",
+      "padrao-manual",
+      "sistema-geral"
+    ]
+  },
+  {
+    "id": "BUG-20260915-15",
+    "subject": "BUG-20260915-15 — Mensagem de \"sem resultados\" não padronizada entre páginas",
+    "description": "_Fonte: Relatorio-Testes-Manuais-2026-09-15.md, BUG-20260915-15_\n\n- **Telas / rotas:** Geral; Tipos de Preço Hemodiálise (nenhum resultado de pesquisa fora do padrão).\n- **Observado:** páginas diferentes usam mensagens diferentes quando o filtro não retorna resultado, sem um padrão único aplicado.\n- **Nota:** o **texto/formato final** ainda não está decidido — ver Padroes-Que-Precisam-De-Definicao-2026-09-15.md. Este BUG cobre a inconsistência em si (fato verificável), não a escolha do texto final.\n- **Evidência:** Anotações.md (linhas 13, 133).",
+    "severity_scale": 1,
+    "tags": [
+      "dados-referencia",
+      "padrao-manual",
+      "sistema-geral"
+    ]
+  },
+  {
+    "id": "BUG-20260915-16",
+    "subject": "BUG-20260915-16 — Exportação XLSX falha sistematicamente (500) e a UI não mostra nenhum erro ao usuário",
+    "description": "_Fonte: Relatorio-Testes-Manuais-2026-09-15.md, BUG-20260915-16_\n\n- **Telas / rotas confirmadas:** Embalagens e Medicamentos (pesquisa); Vacinas (referenciado nas anotações sob o mesmo teste, junto de Tipos de Preço Hemodiálise, Médicos/Prescritores e Diplomas); Locais de Prescrição (pesquisa **e** detalhe); EFR.\n- **Sintoma:** clicar em \"Exportar XLSX\" não produz ficheiro nem qualquer feedback visível — o botão mostra o spinner por instantes e volta ao normal.\n- **Causa raiz backend (investigação registada nas anotações):** o endpoint genérico `POST .../exportar` devolve **500 instantaneamente** em toda feature testada (embalagens-medicamentos, medicamentos/facturas, tipos-preco-hemodialise, medicos-prescritores, diplomas, locais-prescricao — pesquisa e detalhe), com corpo vazio mas headers de XLSX já montados (`Content-Type`/`Content-Disposition`), indicando falha dentro do `StreamingResponseBody` de `ExportadorXlsxImpl.escreverFolhaUnica` (`ccmsns-core-api`), depois dos headers serem preparados e antes de qualquer byte ser escrito. O mecanismo é **partilhado por todas as features** (`ExportacaoControllerBase.java` + `ExportadorXlsxImpl.java`) — não é um defeito de uma página ou de dados específicos. Sem acesso ao log/stdout do processo backend, não foi possível confirmar se é causado por um build \"stale\" do processo em `localhost:8080` ou por um problema real na integração `TransactionTemplate`/`EntityManager` do streaming.\n- **Causa raiz frontend (agravante):** `useExportar.ts` expõe `erro: mutation.error`, mas **nenhum** dos consumidores (`TabelaComExport.tsx`, `EfrDetalhePage.tsx`, `MedicoPrescritorDetalhePage.tsx`) lê essa propriedade nem exibe toast/mensagem; `BotaoExportar`'s `onClick={onExportar}` chama a mutation sem `.catch()`, deixando a rejeição sem tratamento (`Uncaught (in promise) HttpError` no console).\n- **Esperado:** o export gera o ficheiro XLSX; em caso de falha, a UI exibe uma mensagem de erro clara ao usuário.\n- **Observado:** falha 500 sistemática no backend + silêncio total na UI, em pelo menos 5 features distintas.\n- **Evidência:** Anotações.md (linhas 28-44, 136-154, 202-243, 248).",
+    "severity_scale": 3,
+    "tags": [
+      "dados-referencia",
+      "exportacao-xlsx",
+      "sistema-geral"
+    ]
+  },
+  {
+    "id": "BUG-20260915-17",
+    "subject": "BUG-20260915-17 — Hierarquia de títulos incorreta na página de Detalhe da convenção",
+    "description": "_Fonte: Relatorio-Testes-Manuais-2026-09-15.md, BUG-20260915-17_\n\n- **Tela / rota:** `http://localhost:5173/dados-referencia/convencoes/1`\n- **Observado:** a hierarquia dos títulos (H1/H2/...) não segue a ordem esperada na página de detalhes.\n- **Evidência:** Anotações.md (linha 18).",
+    "severity_scale": 1,
+    "tags": [
+      "dados-referencia",
+      "convencoes"
+    ]
+  },
+  {
+    "id": "BUG-20260915-18",
+    "subject": "BUG-20260915-18 — Botão de ação fora do padrão em Processos de Conferência",
+    "description": "_Fonte: Relatorio-Testes-Manuais-2026-09-15.md, BUG-20260915-18_\n\n- **Tela / rota:** `http://localhost:5173/dados-referencia/convencoes/1/processos-conferencia`\n- **Observado:** botão de ação exibido fora do padrão visual do restante do sistema.\n- **Evidência:** Anotações.md (linha 19).",
+    "severity_scale": 1,
+    "tags": [
+      "dados-referencia",
+      "convencoes"
+    ]
+  },
+  {
+    "id": "BUG-20260915-19",
+    "subject": "BUG-20260915-19 — Mensagem de \"ação não disponível\" mostra a URL em vez de um texto legível",
+    "description": "_Fonte: Relatorio-Testes-Manuais-2026-09-15.md, BUG-20260915-19_\n\n- **Tela / rota:** `http://localhost:5173/dados-referencia/convencoes/1/processos-conferencia`\n- **Esperado:** mensagem de erro/indisponibilidade em texto compreensível para o usuário.\n- **Observado:** a mensagem exibida ao usuário é o próprio URL/rota da página, em vez de um texto explicativo.\n- **Evidência:** Anotações.md (linha 20).",
+    "severity_scale": 2,
+    "tags": [
+      "dados-referencia",
+      "convencoes"
+    ]
+  },
+  {
+    "id": "BUG-20260915-20",
+    "subject": "BUG-20260915-20 — Navegação para página filho não retorna o scroll ao topo",
+    "description": "_Fonte: Relatorio-Testes-Manuais-2026-09-15.md, BUG-20260915-20_\n\n- **Tela / rota:** ex. `http://localhost:5173/dados-referencia/convencoes/1/conta-corrente`\n- **Esperado:** ao navegar para uma página filho, a página abre no topo.\n- **Observado:** a página mantém a posição de scroll da página anterior.\n- **Evidência:** Anotações.md (linha 21).",
+    "severity_scale": 2,
+    "tags": [
+      "dados-referencia",
+      "convencoes"
+    ]
+  },
+  {
+    "id": "BUG-20260915-21",
+    "subject": "BUG-20260915-21 — Validação prematura ao clicar fora do campo, antes de submeter",
+    "description": "_Fonte: Relatorio-Testes-Manuais-2026-09-15.md, BUG-20260915-21_\n\n- **Tela / rota:** `http://localhost:5173/dados-referencia/diplomas/novo`\n- **Esperado:** o erro de criação só deveria aparecer após tentativa de submissão do formulário.\n- **Observado:** ao preencher os campos, clicar fora deles já aciona o erro \"Não foi possível criar o diploma.\", antes de qualquer submissão.\n- **Evidência:** Anotações.md (linha 59).",
+    "severity_scale": 2,
+    "tags": [
+      "dados-referencia",
+      "diplomas"
+    ]
+  },
+  {
+    "id": "BUG-20260915-22",
+    "subject": "BUG-20260915-22 — Duplo submit no formulário de Diploma gera erro \"Não foi possível criar o diploma.\"",
+    "description": "_Fonte: Relatorio-Testes-Manuais-2026-09-15.md, BUG-20260915-22_\n\n- **Tela / rota:** `http://localhost:5173/dados-referencia/diplomas/novo`\n- **Causa raiz (investigação registada nas anotações):** em `DiplomaFormulario.tsx:155-160`, o botão \"Guardar\" é `type=\"submit\"` dentro de `<form onSubmit={handleSubmit}>` **e** tem também `onClick={() => handleSubmit()}`. Um único clique dispara `handleSubmit` duas vezes no mesmo tick síncrono (antes do React re-renderizar com `isSaving=true`, por isso `disabled={isSaving}` não chega a bloquear a segunda chamada): a primeira chamada cria o diploma (`201 Created`), a segunda, com o mesmo código, colide em `codigo_duplicado` (`409 Conflict`). O erro adicional de `Failed to fetch`/passthrough no `mockServiceWorker.js` é efeito colateral da revalidação concorrente da query de listagem, não a causa.\n- **Esperado:** um clique no botão \"Guardar\" dispara uma única submissão.\n- **Observado:** duas submissões por clique, resultando em erro de conflito mesmo com dados válidos.\n- **Correção sugerida (não aplicada, fora do escopo de teste):** remover o `onClick` do botão, deixando apenas o `type=\"submit\"` acionar o `onSubmit` do form (ou vice-versa).\n- **Evidência:** Anotações.md (linhas 60-83).",
+    "severity_scale": 2,
+    "tags": [
+      "dados-referencia",
+      "diplomas"
+    ]
+  },
+  {
+    "id": "BUG-20260915-23",
+    "subject": "BUG-20260915-23 — Erro interno (TypeError não tratado) ao navegar de Pesquisar para Detalhes do Prescritor",
+    "description": "_Fonte: Relatorio-Testes-Manuais-2026-09-15.md, BUG-20260915-23_\n\n- **Tela / rota:** navegação entre a página Pesquisar e Detalhes (cenário observado: voltar do detalhe do M51230 para a lista com `estado=SUSPENSO`)\n- **Sintoma:** \"Ocorreu um erro interno. Referência: 624ad4ab-9a63-4975-9744-d76cdaba1bc0.\"\n- **Causa raiz (investigação registada nas anotações, não confirmada por stack trace de console):** o parâmetro `estado` é lido da URL sem validação em runtime (`const estado = (sp.get('estado') ?? undefined) as PesquisaPrescritoresFiltros['estado']` — o `as` é só um cast de TypeScript). Em `EstadoPrescritorBadge.tsx:12`, esse valor é usado direto como chave de objeto sem fallback (`ESTADO_ESTILO[estado]`), e o acesso subsequente a `estilo.fundo` gera `TypeError: Cannot read properties of undefined` se `estado` não for exatamente `ATIVO`/`SUSPENSO`/`CESSADO`. O erro genérico \"Ocorreu um erro interno\" é consistente com um `ErrorBoundary` do pacote `@spms/ui-react`.\n- **Esperado:** navegação entre as páginas funciona sem erro para os estados válidos existentes.\n- **Observado:** erro interno bloqueante ao navegar de volta com filtro de estado aplicado.\n- **Correção sugerida (não aplicada):** validar/aplicar fallback ao parâmetro `estado` tanto no parse (`MedicosPrescritoresPage.tsx:24`) quanto no componente do badge (`EstadoPrescritorBadge.tsx:12`).\n- **Nota:** a causa exata não foi 100% confirmada — falta o stack trace do console do navegador no momento do erro para fechar a investigação.\n- **Evidência:** Anotações.md (linhas 96-113).",
+    "severity_scale": 3,
+    "tags": [
+      "dados-referencia",
+      "medicos-prescritores"
+    ]
+  },
+  {
+    "id": "BUG-20260915-24",
+    "subject": "BUG-20260915-24 — Breadcrumb inconsistente entre a página \"Novo preço\" e a página de Detalhe",
+    "description": "_Fonte: Relatorio-Testes-Manuais-2026-09-15.md, BUG-20260915-24_\n\n- **Tela / rota:** `http://localhost:5173/dados-referencia/tipos-preco-hemodialise/1/precos/novo`\n- **Observado:** o breadcrumb mostra \"Dados de Referência / Tipos de Preço Hemodiálise / Tabela SNS — sessão convencional / Novo preço\" na página de criação, mas \"Dados de Referência / Tipos de Preço Hemodiálise / Detalhe tipo de preço hemodiálise\" na página de detalhes — caminhos diferentes para a mesma hierarquia.\n- **Evidência:** Anotações.md (linha 130).",
+    "severity_scale": 1,
+    "tags": [
+      "dados-referencia",
+      "hemodialise"
+    ]
+  },
+  {
+    "id": "BUG-20260915-25",
+    "subject": "BUG-20260915-25 — Seletor de data não fecha após selecionar uma data",
+    "description": "_Fonte: Relatorio-Testes-Manuais-2026-09-15.md, BUG-20260915-25_\n\n- **Tela / rota:** `http://localhost:5173/dados-referencia/servicos-dispensa-proximidade/4/precos/novo`\n- **Evidência:** Anotações.md (linha 161).",
+    "severity_scale": 2,
+    "tags": [
+      "dados-referencia",
+      "dispensa-proximidade"
+    ]
+  },
+  {
+    "id": "BUG-20260915-26",
+    "subject": "BUG-20260915-26 — Mensagem de erro incorreta ao registar preço acima do limite de dígitos",
+    "description": "_Fonte: Relatorio-Testes-Manuais-2026-09-15.md, BUG-20260915-26_\n\n- **Tela / rota:** `http://localhost:5173/dados-referencia/servicos-dispensa-proximidade/4/precos/novo`\n- **Passos:** registar o preço `555555555555`.\n- **Observado:** API devolve `400 — \"preco: O preço admite no máximo 2 casas decimais\"`, mensagem incorreta — o valor tem 12 dígitos inteiros (excede o limite de 9) e 0 casas decimais (dentro do limite), ou seja, é rejeitado pelo motivo errado.\n- **Causa raiz (investigação registada nas anotações):** `GravarPrecoDispProxRequest.java:16-19` usa `@Digits(integer = 9, fraction = 2, message = \"O preço admite no máximo 2 casas decimais\")` — a anotação `@Digits` do Bean Validation valida dois critérios distintos (dígitos inteiros e casas decimais) com uma **única mensagem**, escrita só para o caso de decimais.\n- **Abrangência — mesmo padrão replicado em outros pontos do código:** `GravarPrecoHemodialiseRequest.java:16-19` (preço de tipos de preço HD, `integer=8, fraction=3`, mesma mensagem enganosa); `GravarServicoDispProxRequest.java:27-30` (taxa de IVA, mesmo padrão, impacto menor por já ter `@DecimalMax(100)`).\n- **Esperado:** mensagem indicando que o valor excede o número máximo de dígitos/é demasiado elevado.\n- **Evidência:** Anotações.md (linhas 162-191).",
+    "severity_scale": 2,
+    "tags": [
+      "dados-referencia",
+      "dispensa-proximidade"
+    ]
+  },
+  {
+    "id": "BUG-20260915-27",
+    "subject": "BUG-20260915-27 — Título da página não corresponde ao título da seção",
+    "description": "_Fonte: Relatorio-Testes-Manuais-2026-09-15.md, BUG-20260915-27_\n\n- **Tela / rota:** Programa Troca de Seringas\n- **Observado:** o título da página mostra \"Programa Troca de Seringas\", mas o título da seção exibido é \"Pesquisa convenções SICAD / kits\".\n- **Evidência:** Anotações.md (linha 196).",
+    "severity_scale": 1,
+    "tags": [
+      "dados-referencia",
+      "troca-seringas"
+    ]
+  },
+  {
+    "id": "BUG-20260915-28",
+    "subject": "BUG-20260915-28 — Breadcrumb não navegável",
+    "description": "_Fonte: Relatorio-Testes-Manuais-2026-09-15.md, BUG-20260915-28_\n\n- **Tela / rota:** `http://localhost:5173/troca-seringas/factura`\n- **Esperado:** os itens do breadcrumb são clicáveis e navegam para a página correspondente.\n- **Observado:** o breadcrumb não é navegável nessa página.\n- **Evidência:** Anotações.md (linha 198).",
+    "severity_scale": 2,
+    "tags": [
+      "dados-referencia",
+      "troca-seringas"
+    ]
+  },
+  {
+    "id": "BUG-20260915-29",
+    "subject": "BUG-20260915-29 — Filtro \"Código do local\" usa correspondência parcial após normalização, retornando milhares de resultados irrelevantes",
+    "description": "_Fonte: Relatorio-Testes-Manuais-2026-09-15.md, BUG-20260915-29_\n\n- **Tela / rota:** `http://localhost:5173/dados-referencia/locais-prescricao` — pesquisa por `codigoLocal=0001`\n- **Observado:** a pesquisa por `0001` devolveu 12.844 resultados (`atingiuLimite: true`), praticamente o catálogo inteiro, em vez de apenas o local \"0001\".\n- **Causa raiz (investigação registada nas anotações):** `NormalizadorCodigoLocal.java:18` remove zeros à esquerda (`\"0001\"` → `\"1\"`); esse valor é usado em `PesquisaLocalPrescricaoRepositoryCustomImpl.java:143-147` dentro de um `LIKE '%1%'` — devolvendo qualquer código que contenha o dígito \"1\" em qualquer posição. A normalização de zeros à esquerda faz sentido, mas deveria produzir *match* exato (ou prefixado), não um `LIKE` com wildcard nos dois lados.\n- **Esperado:** pesquisar \"0001\" retorna apenas o local com esse código (ou prefixo consistente).\n- **Observado:** pesquisas por códigos curtos/paddados retornam milhares de resultados irrelevantes.\n- **Evidência:** Anotações.md (linhas 216-221).",
+    "severity_scale": 2,
+    "tags": [
+      "dados-referencia",
+      "locais-prescricao"
+    ]
+  },
+  {
+    "id": "BUG-20260915-30",
+    "subject": "BUG-20260915-30 — Menus fora do padrão em telas de detalhe",
+    "description": "_Fonte: Relatorio-Testes-Manuais-2026-09-15.md, BUG-20260915-30_\n\n- **Tela / rota:** EFR — telas de detalhe\n- **Observado:** menus exibidos fora do padrão visual/funcional do restante do sistema.\n- **Nota:** a anotação original não detalha qual aspecto do menu está fora do padrão (posição, itens, estilo). Recomenda-se levantamento adicional antes de abrir tarefa de correção.\n- **Evidência:** Anotações.md (linha 249).",
+    "severity_scale": 1,
+    "tags": [
+      "dados-referencia",
+      "efr"
+    ]
+  },
+  {
+    "id": "BUG-20260915-31",
+    "subject": "BUG-20260915-31 — Clicar num item de seleção (checkbox) na pesquisa de Embalagens muda a página e o filtro aplicado",
+    "description": "_Fonte: Relatorio-Testes-Manuais-2026-09-15.md, BUG-20260915-31_\n\n- **Tela / rota:** Pesquisa — Embalagens (`/dados-referencia/embalagens-medicamentos`)\n- **Esperado:** marcar uma caixa de seleção na tabela de resultados não deveria, por si só, navegar para outra página nem alterar o filtro de pesquisa aplicado.\n- **Observado:** clicar numa opção de checkbox muda a página exibida e altera o filtro que está sendo aplicado à pesquisa.\n- **Nota:** o item estava originalmente na secção \"Para analisar\" das anotações, mas descreve um comportamento tecnicamente incorreto e verificável, não uma decisão de padrão pendente — reclassificado como defeito.\n- **Evidência:** Anotações.md (linha 254).",
+    "severity_scale": 2,
+    "tags": [
+      "dados-referencia",
+      "embalagens-medicamentos"
+    ]
+  },
+  {
+    "id": "BUG-20260915-32",
+    "subject": "BUG-20260915-32 — Opção \"Todos\" em filtro não retorna resultado, exige preenchimento mesmo com valor selecionado",
+    "description": "_Fonte: Relatorio-Testes-Manuais-2026-09-15.md, BUG-20260915-32_\n\n- **Tela / rota:** Médicos / Prescritores\n- **Esperado:** ao selecionar \"Todos\" num filtro (um valor válido do dropdown), a pesquisa deveria executar normalmente.\n- **Observado:** mesmo com \"Todos\" selecionado em pelo menos um campo, o sistema retorna \"É necessário preencher pelo menos um dos campos de pesquisa.\" — contradição, já que um valor foi de fato selecionado.\n- **Nota:** o item estava na secção \"Para analisar\" junto de uma sugestão de redesenho do dropdown (mantida em Padroes-Que-Precisam-De-Definicao-2026-09-15.md, item #7); a contradição em si, porém, é um defeito técnico verificável independente da decisão de UX, por isso foi reclassificada.\n- **Evidência:** Anotações.md (linha 261).",
+    "severity_scale": 2,
+    "tags": [
+      "dados-referencia",
+      "medicos-prescritores"
+    ]
+  }
+]

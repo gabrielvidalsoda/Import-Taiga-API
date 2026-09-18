@@ -123,6 +123,13 @@ Criar o restante (reexecuções pulam automaticamente o que já está no log):
 python taiga_import.py apply --input taiga-import.json --apply
 ```
 
+Para manter um registro permanente de uma execução real (não só os arquivos
+de trabalho temporários), passe caminhos `--out`/`--log` dentro de
+`reports/` — veja [`reports/README.md`](reports/README.md) (em inglês) para
+a convenção de nomes. Diferente de `taiga-import.json`/`import-log.csv`
+padrão, arquivos em `reports/` são commitados no repositório como histórico
+de importações.
+
 Flags úteis: `--issue-type` (padrão `Bug`), `--sev1`/`--sev2`/`--sev3` (nomes
 de severidade do Taiga para as escalas 1/2/3 do seu relatório — padrão
 `Minor`/`Normal`/`Critical`, os nomes default do Taiga), `--log` (arquivo de
@@ -140,6 +147,18 @@ python taiga_import.py retag --input taiga-import.json          # dry-run
 python taiga_import.py retag --input taiga-import.json --apply  # aplica
 ```
 
+### 5. Atribuir issues a um membro do projeto
+
+A partir de um CSV de log de import (de uma corrida `apply --apply`
+anterior), atribui cada issue do log a um membro do projeto. A busca é por
+nome completo, porque a API do Taiga não expõe o e-mail de outros membros:
+
+```bash
+python taiga_assign.py --log reports/import-log-2026-09-15.csv --name "Jane Doe"            # dry-run
+python taiga_assign.py --log reports/import-log-2026-09-15.csv --name "Jane Doe" --apply     # aplica
+python taiga_assign.py --log reports/import-log-2026-09-15.csv --name "Jane Doe" --apply --only BUG-20260915-01
+```
+
 ## Arquivos
 
 | Arquivo | Versionado? | Descrição |
@@ -147,11 +166,13 @@ python taiga_import.py retag --input taiga-import.json --apply  # aplica
 | `taiga_common.py` | sim | Cliente HTTP (auth, GET/POST/PATCH) e loader de `.env`. |
 | `taiga_discover.py` | sim | Lista tipos/severidades/status do projeto configurado. |
 | `taiga_import.py` | sim | `extract` / `apply` / `retag`. |
+| `taiga_assign.py` | sim | Atribui issues de um CSV de log de import a um membro do projeto, por nome. |
 | `config.example.json` | sim | Modelo de config de extração (genérico). |
 | `.env.example` | sim | Modelo de credenciais. |
 | `config.json` | não | Sua config real, específica do relatório/projeto. |
 | `.env` | não | Suas credenciais reais. |
-| `taiga-import*.json`, `import-log*.csv` | não | Saída gerada a cada execução — dados do seu relatório, não do repositório. |
+| `taiga-import.json`, `import-log.csv` (raiz do repo) | não | Saída de trabalho da execução em andamento — dados do seu relatório, não do repositório. |
+| `reports/*.json`, `reports/*.csv` | sim | Histórico permanente de execuções `--apply` passadas, mantido de propósito — veja [`reports/README.md`](reports/README.md). |
 
 ## Segurança
 
